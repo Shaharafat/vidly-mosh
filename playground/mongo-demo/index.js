@@ -124,7 +124,7 @@ const directUpdate = async (id) => {
         isPublished: false,
         name: 'Rony',
       },
-    },
+    }
   );
   console.log(result);
 };
@@ -141,7 +141,7 @@ const directUpdateAndShow = async (id) => {
         name: 'Brad',
       },
     },
-    { new: true }
+    { new: true },
   );
   console.log(updatedCourse);
 };
