@@ -44,33 +44,19 @@ const validateCustomer = (customer) => {
 
 // get all customers
 router.get('/', async (req, res) => {
-  let customers;
-  try {
-    customers = await Customer.find().sort('name');
-  } catch (ex) {
-    return res.status(500).send('Error getting data');
-  }
+  const customers = await Customer.find().sort('name');
 
-  if (!customers) {
-    return res.status(404).send('Not Found any data');
-  }
   res.send(customers);
 });
 
 // get individual customers
 router.get('/:id', async (req, res) => {
-  let customer;
   try {
-    customer = await Customer.findById(req.params.id);
+    const customer = await Customer.findById(req.params.id);
+    return res.send(customer);
   } catch (ex) {
-    console.log(ex);
-    return res.status(404).send('Error getting data...');
-  }
-
-  if (!customer) {
     return res.status(404).send('Customer with the given id was not found');
   }
-  res.send(customer);
 });
 
 // create new customer
@@ -105,6 +91,7 @@ router.post('/', async (req, res) => {
 
 // update customer
 router.put('/:id', async (req, res) => {
+  // validate input
   // validate user input with joi
   const error = validateCustomer(req.body);
   if (error) {
@@ -122,32 +109,22 @@ router.put('/:id', async (req, res) => {
     phone: req.body.phone,
   };
 
-  let customer;
   try {
-    customer = await Customer.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+    const customer = await Customer.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+    res.send(customer);
   } catch (ex) {
-    return res.status(404).send('Error updating customer');
-  }
-
-  if (!customer) {
     return res.status(404).send('The customer with the given id was not found!');
   }
-  res.send(customer);
 });
 
 // delete customer
 router.delete('/:id', async (req, res) => {
-  let customer;
   try {
-    customer = await Customer.findByIdAndRemove(req.params.id);
+    const customer = await Customer.findByIdAndRemove(req.params.id);
+    res.send(customer);
   } catch (ex) {
-    return res.status(400).send('Error deleting customer');
+    return res.status(400).send('Could not found the customer to delete');
   }
-
-  if (!customer) {
-    return res.status(404).send('The customer with the given id was not found!');
-  }
-  res.send(customer);
 });
 
 // export module
