@@ -8,40 +8,10 @@
  */
 
 // dependencies
-const mongoose = require('mongoose');
 const express = require('express');
-const Joi = require('joi');
+const { Customer, validate } = require('../models/customer'); // customer
 
 const router = express.Router();
-
-// define customer schema
-const customerSchema = new mongoose.Schema({
-  isGold: { type: Boolean, default: false },
-  name: {
-    type: String,
-    minlength: 3,
-    maxlength: 50,
-    required: true,
-  },
-  phone: { type: String, required: true },
-});
-
-// customers model
-const Customer = mongoose.model('Customer', customerSchema);
-
-// validate customer data with joi
-const validateCustomer = (customer) => {
-  const schema = Joi.object({
-    isGold: Joi.boolean(),
-    name: Joi.string().min(3).max(50).required(),
-    phone: Joi.string().min(9).required(),
-  });
-
-  const { error } = schema.validate(customer);
-
-  return error;
-};
-
 // get all customers
 router.get('/', async (req, res) => {
   const customers = await Customer.find().sort('name');
@@ -62,7 +32,7 @@ router.get('/:id', async (req, res) => {
 // create new customer
 router.post('/', async (req, res) => {
   // validate user input with joi
-  const error = validateCustomer(req.body);
+  const error = validate(req.body);
   if (error) {
     const {
       details: [{ message }],
@@ -83,7 +53,7 @@ router.post('/', async (req, res) => {
     const result = await customer.save();
     res.send(result);
   } catch (ex) {
-    for (const prop in ex.errors) {
+    for (const prop of ex.errors) {
       res.status(400).send(ex.errors[prop].properties.message);
     }
   }
@@ -93,7 +63,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   // validate input
   // validate user input with joi
-  const error = validateCustomer(req.body);
+  const error = validate(req.body);
   if (error) {
     const {
       details: [{ message }],

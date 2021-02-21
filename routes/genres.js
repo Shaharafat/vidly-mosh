@@ -8,35 +8,10 @@
  */
 
 // dependencies
-const mongoose = require('mongoose');
 const express = require('express');
-const Joi = require('joi');
+const { Genre, validate } = require('../models/genre');
 
 const router = express.Router();
-
-// genre schema
-const genreSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 500,
-  },
-});
-
-// genre model
-const Genre = mongoose.model('Genre', genreSchema);
-
-// validate
-const validateGenre = (genre) => {
-  const schema = Joi.object({
-    name: Joi.string().min(3).required(),
-  });
-  const { error } = schema.validate(genre);
-
-  return error;
-};
-
 // get all genres
 router.get('/', async (req, res) => {
   const genres = await Genre.find().sort('name');
@@ -54,7 +29,7 @@ router.get('/:id', async (req, res) => {
 
 // add new genre
 router.post('/', async (req, res) => {
-  const error = validateGenre(req.body);
+  const error = validate(req.body);
 
   if (error) {
     const {
@@ -75,7 +50,7 @@ router.post('/', async (req, res) => {
 
 // update a genre
 router.put('/:id', async (req, res) => {
-  const error = validateGenre(req.body);
+  const error = validate(req.body);
 
   if (error) {
     const {
