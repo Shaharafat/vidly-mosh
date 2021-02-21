@@ -1,9 +1,17 @@
 const express = require('express');
 const Joi = require('joi');
+const morgan = require('morgan');
+// const debug = require('debug')('app:startup'); // debug namespace create
 
 const app = express();
 
 app.use(express.json());
+
+// use morgan
+if (app.get('env') === 'development') {
+  app.use(morgan('tiny'));
+  // debug('morgan enabled...'); // use debug here
+}
 
 const courses = [
   { id: 1, name: 'React' },
