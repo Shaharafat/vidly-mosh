@@ -18,8 +18,10 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "fawn": "^2.1.5",
     "helmet": "^4.4.1",
     "joi": "^17.4.0",
+    "joi-objectid": "^3.0.1",
     "mongoose": "^5.11.17",
     "morgan": "^1.10.0"
   }

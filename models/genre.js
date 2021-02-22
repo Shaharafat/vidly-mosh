@@ -34,4 +34,4 @@ const validateGenre = (genre) => {
 };
 
 // export module
-module.exports = { Genre, validate: validateGenre };
+module.exports = { Genre, validate: validateGenre, genreSchema };
