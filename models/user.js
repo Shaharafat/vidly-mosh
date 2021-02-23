@@ -26,7 +26,6 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    trim: true,
     minlength: 8,
     maxlength: 1024,
     required: true,
@@ -36,11 +35,11 @@ const userSchema = new mongoose.Schema({
 // user model
 const User = mongoose.model('User', userSchema);
 
-// validate user input with joi
+// validate user input with joi hello
 const validateUser = (user) => {
   const schema = Joi.object({
-    name: Joi.string().minlength(3).max(50).required(),
-    emailengthl: Joi.string().email({ tlds: { allow: ['com', 'net'] } }),
+    name: Joi.string().min(3).max(50).required(),
+    email: Joi.string().email({ tlds: { allow: ['com', 'net'] } }),
     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{8,30}$')),
   });
 
