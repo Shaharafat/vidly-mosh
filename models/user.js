@@ -7,6 +7,8 @@
  *
  */
 // dependencies
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const mongoose = require('mongoose');
 const Joi = require('joi');
 
@@ -30,7 +32,14 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     required: true,
   },
+  isAdmin: Boolean,
 });
+
+// Information export principles
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ _id: this._id, isAdmin: this.isAdmin }, config.get('jwtPrivateKey'));
+  return token;
+};
 
 // user model
 const User = mongoose.model('User', userSchema);

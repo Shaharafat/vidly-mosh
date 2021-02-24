@@ -11,6 +11,9 @@
 const express = require('express');
 const { Genre, validate } = require('../models/genre');
 
+const auth = require('../middlewares/auth');
+const admin = require('../middlewares/admin');
+
 const router = express.Router();
 // get all genres
 router.get('/', async (req, res) => {
@@ -28,7 +31,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // add new genre
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
   const error = validate(req.body);
 
   if (error) {
@@ -72,7 +75,8 @@ router.put('/:id', async (req, res) => {
 });
 
 // delete genres
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
+  console.log(req.params.id);
   const genre = await Genre.findByIdAndRemove(req.params.id);
 
   if (!genre) return res.status(404).send('Could not found genre to delete!');
