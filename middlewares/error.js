@@ -25,4 +25,4 @@ const error = (err, req, res, next) => {
 };
 
 // export
-module.exports = error
+module.exports = error;
