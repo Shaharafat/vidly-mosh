@@ -13,55 +13,45 @@ const { Genre, validate } = require('../models/genre');
 
 const auth = require('../middlewares/auth');
 const admin = require('../middlewares/admin');
-const asyncMiddleware = require('../middlewares/async');
 
 const router = express.Router();
 
 // get all genres
-router.get(
-  '/',
-  asyncMiddleware(async (req, res) => {
-    const genres = await Genre.find().sort('name');
-    res.send(genres);
-  })
-);
+router.get('/', async (req, res) => {
+  throw new Error('Could not get the genre.');
+  const genres = await Genre.find().sort('name');
+  res.send(genres);
+});
 
 // get individual genre
-router.get(
-  '/:id',
-  asyncMiddleware(async (req, res) => {
-    const genre = await Genre.findById(req.params.id);
+router.get('/:id', async (req, res) => {
+  const genre = await Genre.findById(req.params.id);
 
-    if (!genre) return res.status(404).send('Could not found genre');
+  if (!genre) return res.status(404).send('Could not found genre');
 
-    res.send(genre);
-  })
-);
+  res.send(genre);
+});
 
 // add new genre
-router.post(
-  '/',
-  auth,
-  asyncMiddleware(async (req, res) => {
-    const error = validate(req.body);
+router.post('/', auth, async (req, res) => {
+  const error = validate(req.body);
 
-    if (error) {
-      const {
-        details: [{ message }],
-      } = error;
-      // bad request
-      res.status(400).send(message);
-      return;
-    }
+  if (error) {
+    const {
+      details: [{ message }],
+    } = error;
+    // bad request
+    res.status(400).send(message);
+    return;
+  }
 
-    let genre = new Genre({
-      name: req.body.name,
-    });
-    genre = await genre.save();
+  let genre = new Genre({
+    name: req.body.name,
+  });
+  genre = await genre.save();
 
-    res.send(genre);
-  })
-);
+  res.send(genre);
+});
 
 // update a genre
 router.put('/:id', async (req, res) => {
