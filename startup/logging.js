@@ -8,6 +8,7 @@
  */
 // dependencies
 const winston = require('winston');
+// const { createLogger, transports } = require('winston');
 // require('winston-mongodb');
 require('express-async-errors');
 
@@ -38,6 +39,11 @@ const logger = () => {
   });
 
   winston.add(new winston.transports.File({ filename: 'combined.log' }));
+  winston.add(
+    new winston.transports.Console({
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    })
+  );
   // winston.add(new winston.transports.MongoDB({ db: 'mongodb://localhost/vidly' }));
 };
 

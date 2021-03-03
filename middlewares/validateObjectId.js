@@ -1,0 +1,18 @@
+/*
+ *
+ * Title: validate object id
+ * Description: validate object id
+ * Author: Shah Arafat
+ * Date: 03-03-2021
+ *
+ */
+// dependencies
+const mongoose = require('mongoose');
+
+module.exports = function (req, res, next) {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(404).send('Invalid ID.');
+  }
+
+  next();
+};

@@ -6,15 +6,18 @@
  * Date: 27-02-2021
  *
  */
+
 // dependencies
 const mongoose = require('mongoose');
 const winston = require('winston');
+const config = require('config');
 
 const initializeDb = () => {
+  const db = config.get('db');
   mongoose
-    .connect('mongodb://localhost/vidly', { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
     .then(() => {
-      winston.info('connected to mongoDB'); // log with winston
+      winston.info(`connected to ${db}`); // log with winston
     });
 };
 

@@ -9,6 +9,7 @@
 
 // dependencies
 const express = require('express');
+const validateObjectId = require('../middlewares/validateObjectId');
 const { Genre, validate } = require('../models/genre');
 
 const auth = require('../middlewares/auth');
@@ -24,7 +25,7 @@ router.get('/', async (req, res) => {
 });
 
 // get individual genre
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateObjectId, async (req, res) => {
   const genre = await Genre.findById(req.params.id);
 
   if (!genre) return res.status(404).send('Could not found genre');
