@@ -9,11 +9,12 @@
 
 //  dependencies
 const request = require('supertest');
+const mongoose = require('mongoose');
 const { Genre } = require('../../models/genre');
 const { User } = require('../../models/user');
 
-let server;
 describe('/api/genres', () => {
+  let server;
   // start server before each test case
   beforeEach(() => {
     server = require('../../index');
@@ -52,6 +53,13 @@ describe('/api/genres', () => {
 
       expect(res.status).toBe(404);
     });
+
+    test('should return 404 if no genre with the given id exists', async () => {
+      const id = mongoose.Types.ObjectId();
+      const res = await request(server).get(`/api/genres/${id}`);
+
+      expect(res.status).toBe(404);
+    });
   });
 
   // 🧪 POST TEST
@@ -59,7 +67,7 @@ describe('/api/genres', () => {
     let token;
     let name;
 
-    const exec = async () => await request(server).post('/api/genres').set('x-auth-token', token).send({ name });
+    const exec = () => request(server).post('/api/genres').set('x-auth-token', token).send({ name });
 
     beforeEach(() => {
       token = new User().generateAuthToken();
