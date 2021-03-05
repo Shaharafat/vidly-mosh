@@ -21,7 +21,7 @@ describe('/api/genres', () => {
   });
   // close after each test done
   afterEach(async () => {
-    server.close();
+    await server.close();
     await Genre.remove({});
   });
 
@@ -67,7 +67,8 @@ describe('/api/genres', () => {
     let token;
     let name;
 
-    const exec = () => request(server).post('/api/genres').set('x-auth-token', token).send({ name });
+    const exec = () =>
+      request(server).post('/api/genres').set('x-auth-token', token).send({ name });
 
     beforeEach(() => {
       token = new User().generateAuthToken();

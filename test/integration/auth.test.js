@@ -17,14 +17,12 @@ describe('auth middleware', () => {
     server = require('../../index');
   });
   afterEach(async () => {
-    server.close();
+    await server.close();
     await Genre.remove({});
   });
 
   let token;
-  const exec = () => {
-    return request(server).post('/api/genres').set('x-auth-token', token).send({ name: 'genre1' }); 
-  }
+  const exec = () => request(server).post('/api/genres').set('x-auth-token', token).send({ name: 'genre1' });
 
   beforeEach(() => {
     token = new User().generateAuthToken();
