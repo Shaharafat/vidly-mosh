@@ -6,10 +6,13 @@
   "author": "Shah Arafat <shaharafhat@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "jest --watchAll --verbose",
     "test-jest": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
   },
+  "engines": {
+    "node": "10.16.3"
+  },  
   "devDependencies": {
     "eslint": "7.2.0",
     "eslint-config-airbnb-base": "14.2.1",
@@ -22,6 +25,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "compression": "^1.7.4",
     "config": "^3.3.3",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
